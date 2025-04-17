@@ -78,14 +78,16 @@ if model:
         img_resized = img.resize((224, 224))
         img_array = image.img_to_array(img_resized)
         img_array = np.expand_dims(img_array, axis=0)
-
-        # Predict
-
         predictions = model.predict(img_array)
-        predicted_class = class_names[np.argmax(predictions)]
         confidence = np.max(predictions)
+        
+        if confidence < 0.20:
+             predicted_class = "Normal"
+        else:
+             predicted_class = class_names[np.argmax(predictions)]
 
         # Show result
         st.success(f"Predicted Abnormality: **{predicted_class}** ({confidence * 100:.2f}%)")
+
 else:
     st.error("Model not loaded. Please select a valid model.")
