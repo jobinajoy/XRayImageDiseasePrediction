@@ -4,6 +4,9 @@ import tensorflow as tf
 from tensorflow.keras.models import load_model
 from tensorflow.keras.preprocessing import image
 from PIL import Image
+import tempfile
+import requests
+import os
 
 # Import preprocess functions for each model
 from tensorflow.keras.applications.efficientnet import preprocess_input as efficientnet_preprocess
@@ -23,18 +26,35 @@ class_names = [
     "Pneumothorax"
 ]  # <-- update this
 
-# Load model based on selection
+def download_model_from_github(url):
+    response = requests.get(url)
+    if response.status_code == 200:
+        temp_dir = tempfile.mkdtemp()
+        file_path = os.path.join(temp_dir, "model.h5")
+        with open(file_path, "wb") as f:
+            f.write(response.content)
+        return file_path
+    else:
+        raise FileNotFoundError(f"Unable to download model. Status code: {response.status_code}")
+
+
 @st.cache_resource
 def load_selected_model(name):
+    accuracy = None  # Default
     if name == 'EfficientNetB0':
-        model_path = 'jobinajoy/xrayimagediseaseprediction/main/model/EfficientNetB0Model.h5'
+        url = 'https://raw.githubusercontent.com/jobinajoy/XRayImageDiseasePrediction/dev/model/EfficientNetB0Model.h5'
+        model_path = download_model_from_github(url)
         model = load_model(model_path, custom_objects={'preprocess_input': efficientnet_preprocess})
+        accuracy = 0.91
     elif name == "ResNet50":
-        model_path = 'jobinajoy/xrayimagediseaseprediction/main/model/EfficientNetB0Model.h5'
+        url ='https://raw.githubusercontent.com/jobinajoy/XRayImageDiseasePrediction/dev/model/EfficientNetB0Model.h5'
+        model_path = download_model_from_github(url)
         model = load_model(model_path, custom_objects={'preprocess_input': resnet_preprocess})
+        accuracy = 0.89
     else:
         model, accuracy = None, None
     return model, accuracy
+
 
 # Streamlit UI
 st.title("🩺 Abnormality Detection in Lungs Using XRay")
