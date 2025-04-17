@@ -27,10 +27,10 @@ class_names = [
 @st.cache_resource
 def load_selected_model(name):
     if name == 'EfficientNetB0':
-        model_path = 'model/EfficientNetB0Model.h5'
+        model_path = 'jobinajoy/xrayimagediseaseprediction/main/model/EfficientNetB0Model.h5'
         model = load_model(model_path, custom_objects={'preprocess_input': efficientnet_preprocess})
     elif name == "ResNet50":
-        model_path = 'model/EfficientNetB0Model.h5'
+        model_path = 'jobinajoy/xrayimagediseaseprediction/main/model/EfficientNetB0Model.h5'
         model = load_model(model_path, custom_objects={'preprocess_input': resnet_preprocess})
     else:
         model, accuracy = None, None
