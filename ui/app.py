@@ -27,10 +27,10 @@ class_names = [
 @st.cache_resource
 def load_selected_model(name):
     if name == 'EfficientNetB0':
-        model_path = 'C:/Users/email/OneDrive - Lambton College/T3/PROJECT/2025W-T3 BDM 3035/model/EfficientNetB0Model.h5'
+        model_path = 'model/EfficientNetB0Model.h5'
         model = load_model(model_path, custom_objects={'preprocess_input': efficientnet_preprocess})
     elif name == "ResNet50":
-        model_path = 'C:/Users/email/OneDrive - Lambton College/T3/PROJECT/2025W-T3 BDM 3035/model/ResNet50Model.h5'
+        model_path = 'model/EfficientNetB0Model.h5'
         model = load_model(model_path, custom_objects={'preprocess_input': resnet_preprocess})
     else:
         model, accuracy = None, None
